@@ -1,0 +1,8 @@
+{
+  "name": "rym-live-calendar",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": "22.x" },
+  "scripts": { "test": "node --test", "dev": "node --env-file=.env.local dev.mjs", "secrets": "node scripts/secrets.mjs", "setup": "node --env-file=.env.local scripts/admin.mjs setup", "provision": "node --env-file=.env.local scripts/admin.mjs provision" }
+}

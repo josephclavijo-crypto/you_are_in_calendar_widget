@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": { "api/*.js": { "maxDuration": 30 } },
+  "rewrites": [
+    { "source": "/google", "destination": "/api/calendar?p=google" },
+    { "source": "/outlook", "destination": "/api/calendar?p=outlook" },
+    { "source": "/office365", "destination": "/api/calendar?p=office365" },
+    { "source": "/yahoo", "destination": "/api/calendar?p=yahoo" },
+    { "source": "/apple", "destination": "/api/calendar?p=apple" },
+    { "source": "/event.ics", "destination": "/api/calendar?p=ics" }
+  ]
+}

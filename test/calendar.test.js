@@ -1,6 +1,6 @@
 import test, { beforeEach, afterEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { issueToken, readToken, calendarICS, description, providerURL, zoomURL, NIGHTS, foldLine } from '../lib/core.js';
+import { issueToken, readToken, calendarICS, description, descriptionHTML, providerURL, zoomURL, NIGHTS, foldLine } from '../lib/core.js';
 import { GET } from '../api/calendar.js';
 import { POST } from '../api/provision.js';
 import { GET as setup } from '../api/setup.js';
@@ -53,7 +53,7 @@ test('provider parameters round-trip Zoom query strings, Unicode and full descri
   for(const p of ['google','outlook','office365','yahoo']) {
     const u=new URL(providerURL(p,join,registration,1));
     assert.equal(u.searchParams.get(p==='yahoo'?'in_loc':'location'),join);
-    assert.equal(u.searchParams.get(p==='google'?'details':p==='yahoo'?'desc':'body'),description(join,registration));
+    assert.equal(u.searchParams.get(p==='google'?'details':p==='yahoo'?'desc':'body'),p==='google'?descriptionHTML(join,registration):description(join,registration));
     assert.ok(u.search.includes('20261020') || u.search.includes('2026-10-20'));
   }
   assert.equal(new URL(providerURL('google',join,registration,0,true)).searchParams.get('recur'),'RRULE:FREQ=DAILY;COUNT=2');
@@ -78,7 +78,7 @@ test('all five routes render or download; native redirects preserve data; GET ne
       const u=new URL(r.headers.get('Location'));
       assert.equal(u.origin,'https://calendar.google.com');
       assert.equal(u.searchParams.get('recur'),'RRULE:FREQ=DAILY;COUNT=2');
-      assert.equal(u.searchParams.get('details'),description(join,registration));
+      assert.equal(u.searchParams.get('details'),descriptionHTML(join,registration));
       assert.equal(u.searchParams.get('location'),join);
       assert.equal(u.searchParams.get('dates'),'20261019T230000Z/20261020T010000Z');
     } else {

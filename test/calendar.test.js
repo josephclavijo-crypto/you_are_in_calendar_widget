@@ -29,6 +29,16 @@ beforeEach(()=>{
 });
 afterEach(()=>{globalThis.fetch=originalFetch;});
 const req=(p,extra='')=>new Request('https://calendar.example.com/api/calendar?p='+p+'&t='+stored+extra);
+test('Google bold description preserves full text and safely escapes dynamic values',()=>{
+  const html=descriptionHTML(join,registration);
+  assert.ok(html.includes('<b>Your Join Link HERE:</b>'));
+  assert.ok(html.includes('<b>The Mortgage Trap</b>'));
+  assert.ok(html.includes('Michael &amp; Cody</b>'));
+  assert.ok(html.includes('unique%2Bpersonal&amp;pwd=a%26b'));
+  assert.ok(!descriptionHTML('https://zoom.us/?x=<script>',registration).includes('<script>'));
+  const plain=html.replace(/<\/?b>/g,'').replace(/<br>/g,'\n').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'");
+  assert.equal(plain,description(join,registration));
+});
 test('encrypted tokens authenticate and reject tampering, raw contact IDs, expiry and key rotation',()=>{
   const token=issueToken(cid);assert.equal(readToken(token),cid);assert.ok(!token.includes(cid));
   assert.throws(()=>readToken('contactABC123'));

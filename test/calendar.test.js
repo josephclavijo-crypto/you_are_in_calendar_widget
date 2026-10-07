@@ -72,9 +72,18 @@ test('provision is authenticated, saves only token, verifies write and reuses to
 test('all five routes render or download; native redirects preserve data; GET never writes',async()=>{
   stored=issueToken(cid);
   for(const p of ['google','office365','outlook','yahoo','apple','ics']) {
-    const r=await GET(req(p));assert.equal(r.status,200);assert.match(r.headers.get('Cache-Control'),/no-store/);
+    const r=await GET(req(p));assert.equal(r.status,p==='google'?302:200);assert.match(r.headers.get('Cache-Control'),/no-store/);
     assert.equal(r.headers.get('Referrer-Policy'),'no-referrer');
-    const text=await r.text();assert.ok(text.includes(p==='apple'||p==='ics'?'BEGIN:VCALENDAR':'Download both nights'));
+    if(p==='google') {
+      const u=new URL(r.headers.get('Location'));
+      assert.equal(u.origin,'https://calendar.google.com');
+      assert.equal(u.searchParams.get('recur'),'RRULE:FREQ=DAILY;COUNT=2');
+      assert.equal(u.searchParams.get('details'),description(join,registration));
+      assert.equal(u.searchParams.get('location'),join);
+      assert.equal(u.searchParams.get('dates'),'20261019T230000Z/20261020T010000Z');
+    } else {
+      const text=await r.text();assert.ok(text.includes(p==='apple'||p==='ics'?'BEGIN:VCALENDAR':'Download both nights'));
+    }
   }
   for(const p of ['google','office365','outlook','yahoo']) {
     const r=await GET(req(p,'&action=night&n=2'));assert.equal(r.status,302);

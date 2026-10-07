@@ -12,7 +12,7 @@ export async function GET(request) {
     // Conservative application limit: protect Location headers and provider/browser URL handling.
     if (Buffer.byteLength(providerURL(provider,join,registration,0,provider==='google')) > 6000) return respond(landing(provider,token,join,registration,false));
     const action=u.searchParams.get('action');
-    if (action==='series' && provider==='google') return respond(null,302,{Location:providerURL(provider,join,registration,0,true)});
+    if (provider==='google' && (!action || action==='series')) return respond(null,302,{Location:providerURL(provider,join,registration,0,true)});
     if (action==='night') {
       const n=u.searchParams.get('n');
       if (!['1','2'].includes(n)) throw new AppError(400,'Invalid night.');

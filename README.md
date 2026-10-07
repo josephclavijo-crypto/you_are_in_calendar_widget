@@ -21,7 +21,7 @@ Todos los enlaces del email llevan solo un token cifrado, nunca la descripción,
 | Ruta | Comportamiento |
 |---|---|
 | `/apple?t=TOKEN` | Descarga el `.ics` con las dos noches recurrentes. Abrir/importar en Apple Calendar. |
-| `/google?t=TOKEN` | Página con `.ics`, botón de serie Google y botones separados para las noches 1 y 2. |
+| `/google?t=TOKEN` | Abre directamente Google Calendar con la serie de dos noches lista para guardar. |
 | `/office365?t=TOKEN` | Página con `.ics` recurrente y botones de noche 1 y 2 para Outlook empresarial. |
 | `/outlook?t=TOKEN` | Página con `.ics` recurrente y botones de noche 1 y 2 para Outlook personal. |
 | `/yahoo?t=TOKEN` | Página con `.ics` recurrente y botones de noche 1 y 2 para Yahoo. |
